@@ -5,6 +5,7 @@ import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -29,17 +30,22 @@ public class StudentController {
         this.studentService = studentService;
     }
     
-	@GetMapping
+	@GetMapping(produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	public ResponseEntity<?> findAll(Pageable pageable) {			    
 		return new ResponseEntity<>(studentService.findAll(pageable), HttpStatus.OK) ;
 	}
+	
+	@GetMapping(path = "/all", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    public ResponseEntity<?> findAll() {               
+        return new ResponseEntity<>(studentService.findAll(), HttpStatus.OK) ;
+    }
 	
 	@PostMapping
 	public ResponseEntity<?> save(@Valid @RequestBody Student student){
 	    return new ResponseEntity<>(studentService.save(student), HttpStatus.OK);
 	}
 	
-	@GetMapping("/{id}")
+	@GetMapping(path = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> find(@PathVariable Long id){
         return new ResponseEntity<>(studentService.find(id), HttpStatus.OK);
     }

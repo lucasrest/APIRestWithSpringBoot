@@ -14,6 +14,21 @@ public class Student extends DefaultEntity{
     @NotEmpty
 	private String registration;
     
+    
+    public Student() {
+       
+    }
+
+    public Student(String name, String registration) {
+        this.name = name;
+        this.registration = registration;
+    }
+    
+    public Student(Long id, String name, String registration) {
+        this.setId(id);
+        this.name = name;
+        this.registration = registration;
+    }
 
     public String getName() {
         return name;

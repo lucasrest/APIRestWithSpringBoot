@@ -1,7 +1,5 @@
 package br.com.rest.services;
 
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -12,17 +10,17 @@ import br.com.rest.models.Student;
 import br.com.rest.repositories.StudentRepository;
 
 @Service
-public class StudentService {
-
-    @Autowired
-    StudentRepository studentRepository;
+public class StudentService{
     
-    public StudentService(StudentRepository studentRespository) {
-        this.studentRepository = studentRespository;
-    }
+    @Autowired 
+    StudentRepository studentRepository;
     
     public Iterable<Student> findAll(Pageable pageable) {
         return studentRepository.findAll(pageable);
+    }
+    
+    public Iterable<Student> findAll() {
+        return studentRepository.findAll();
     }
     
     public Student find(Long id) {
@@ -45,9 +43,11 @@ public class StudentService {
         return HttpStatus.OK;
     }
     
-    private void verifyIfStudentExist(Long id) {
+    private void verifyIfStudentExist(Long id) throws ResourceNotFoundException{
+        System.out.println(id);
         if(studentRepository.findOne(id) == null)
             throw new ResourceNotFoundException("Student not found!");
     }
+      
     
 }
