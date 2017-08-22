@@ -1,4 +1,4 @@
-package br.com.rest.services;
+package br.com.rest.repositories;
 
 import static org.assertj.core.api.Assertions.assertThat;
 

@@ -144,6 +144,46 @@ public class StudentControllerTests extends AuthControllerTests {
         mockMvc.perform(delete("/students")).andExpect(status().isForbidden());
     }
     
+    @Test
+    public void updateWithNameNullShouldReturnStatusCode400() throws Exception {
+        Student student = new Student(1L, null, "123");
+        
+        String json = mapper.writeValueAsString(student);
+        
+        mockMvc.perform(put("/students")
+                   .header("Authorization", mvcResult.getResponse().getHeader("Authorization"))
+                   .contentType(MediaType.APPLICATION_JSON)
+                   .content(json))
+                        .andExpect(status().isBadRequest());
+    }
+    
+    @Test
+    public void updateWithRegistrationNullShouldReturnStatusCode400() throws Exception {
+        Student student = new Student(1L, "nigas", null);
+        
+        String json = mapper.writeValueAsString(student);
+        
+        mockMvc.perform(put("/students")
+                   .header("Authorization", mvcResult.getResponse().getHeader("Authorization"))
+                   .contentType(MediaType.APPLICATION_JSON)
+                   .content(json))
+                        .andExpect(status().isBadRequest());
+    }
+    
+    @Test
+    public void updateShouldReturnPersistChangedStudentAndStatusCode200() throws Exception {
+        Student student = new Student(1L, "nigas", "123");
+        
+        String json = mapper.writeValueAsString(student);
+        
+        mockMvc.perform(put("/students")
+                   .header("Authorization", mvcResult.getResponse().getHeader("Authorization"))
+                   .contentType(MediaType.APPLICATION_JSON)
+                   .content(json))
+                        .andDo(print())
+                        .andExpect(status().isOk());
+    }
+    
     @Test(expected=MalformedJwtException.class)
     public void saveWithInvalidTokenShouldReturnMalformedJwtException() throws Exception {
         mockMvc.perform(post("/students").header("Authorization", invalidToken));
@@ -167,7 +207,9 @@ public class StudentControllerTests extends AuthControllerTests {
     			.contentType(MediaType.APPLICATION_JSON)
     			.content(json)	
     			.header("Authorization", mvcResult.getResponse().getHeader("Authorization")))
-    					.andExpect(status().isBadRequest());
+    	            .andExpect(jsonPath("$.title", is("Erro ao validar os Campos")))
+    				.andExpect(status().isBadRequest());
+    	            
     }
     
     @Test
@@ -183,7 +225,8 @@ public class StudentControllerTests extends AuthControllerTests {
     			.contentType(MediaType.APPLICATION_JSON)
     			.content(json)
     			.header("Authorization", mvcResult.getResponse().getHeader("Authorization")))
-    					.andExpect(status().isBadRequest());
+    	            .andExpect(jsonPath("$.title", is("Erro ao validar os Campos")))	
+    	            .andExpect(status().isBadRequest());
     }
     
     @Test

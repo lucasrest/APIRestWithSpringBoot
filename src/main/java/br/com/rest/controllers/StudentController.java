@@ -51,7 +51,7 @@ public class StudentController {
     }
 	
 	@PutMapping(produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public ResponseEntity<?> update(@RequestBody Student student){
+    public ResponseEntity<?> update(@Valid @RequestBody Student student){
         return new ResponseEntity<>(studentService.update(student), HttpStatus.OK);
     }
 	
