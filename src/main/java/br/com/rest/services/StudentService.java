@@ -44,7 +44,6 @@ public class StudentService{
     }
     
     private void verifyIfStudentExist(Long id) throws ResourceNotFoundException{
-        System.out.println(id);
         if(studentRepository.findOne(id) == null)
             throw new ResourceNotFoundException("Student not found!");
     }

@@ -8,7 +8,7 @@ import org.hibernate.validator.constraints.NotEmpty;
 @Table(name = "students")
 public class Student extends DefaultEntity{ 
 	
-    @NotEmpty
+    @NotEmpty(message = "O Nome é obrigatório")
     private String name;
 	
     @NotEmpty

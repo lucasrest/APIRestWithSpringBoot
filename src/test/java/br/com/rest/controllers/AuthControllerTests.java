@@ -10,10 +10,12 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.BDDMockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.FilterChainProxy;
@@ -24,20 +26,23 @@ import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import br.com.rest.models.User;
+import br.com.rest.repositories.UserRepository;
 import br.com.rest.services.UserService;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment=WebEnvironment.RANDOM_PORT)
-//@WebAppConfiguration
 @AutoConfigureMockMvc
 public class AuthControllerTests {
 
     @Resource
     private FilterChainProxy filterChainProxy;
 
-    @Autowired
-    protected UserService userService;
-
+    @MockBean
+    protected UserRepository userRepository;
+    
     @Autowired
     private WebApplicationContext wac;
 
@@ -45,11 +50,14 @@ public class AuthControllerTests {
     protected DataSource dataSource;
 
     protected MockMvc mockMvc;
+    
+    @Autowired 
+    protected ObjectMapper mapper;
 
     protected MvcResult mvcResult;
 
     @Before
-    public void setupMockMvc() throws Exception {
+    public void setup() throws Exception {
 
         this.mockMvc = MockMvcBuilders.webAppContextSetup(this.wac).addFilter(filterChainProxy).build();
         signedIn();
@@ -63,7 +71,9 @@ public class AuthControllerTests {
 
     @Test
     public void signedIn() throws Exception {
-
+    	
+    	BDDMockito.when(userRepository.findByUsername("lucas")).thenReturn(new User("lucas", "123"));
+    	
         mvcResult = mockMvc.perform(post("/login").param("username", "lucas").param("password", "123"))
                 .andExpect(status().isOk()).andReturn();
 

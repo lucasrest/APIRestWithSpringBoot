@@ -40,22 +40,22 @@ public class StudentController {
         return new ResponseEntity<>(studentService.findAll(), HttpStatus.OK) ;
     }
 	
-	@PostMapping
+	@PostMapping(produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	public ResponseEntity<?> save(@Valid @RequestBody Student student){
 	    return new ResponseEntity<>(studentService.save(student), HttpStatus.OK);
 	}
 	
-	@GetMapping(path = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+	@GetMapping(path = "/{id}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity<?> find(@PathVariable Long id){
         return new ResponseEntity<>(studentService.find(id), HttpStatus.OK);
     }
 	
-	@PutMapping
+	@PutMapping(produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity<?> update(@RequestBody Student student){
         return new ResponseEntity<>(studentService.update(student), HttpStatus.OK);
     }
 	
-	@DeleteMapping("/{id}")
+	@DeleteMapping(path = "/{id}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity<?> delete(@PathVariable Long id){
         return new ResponseEntity<>(studentService.delete(id));
     }
