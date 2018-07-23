@@ -15,7 +15,7 @@ public class PageableConfig extends WebMvcConfigurerAdapter{
     public void addArgumentResolvers(List<HandlerMethodArgumentResolver> argumentsResolver) {        
         PageableHandlerMethodArgumentResolver phma = new PageableHandlerMethodArgumentResolver();
         phma.setFallbackPageable(new PageRequest(0, 3));
-        argumentsResolver.add(phma);
+        argumentsResolver.add( phma );
     }
     
 }
