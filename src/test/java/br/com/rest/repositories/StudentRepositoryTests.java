@@ -3,6 +3,7 @@ package br.com.rest.repositories;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import javax.persistence.EntityManager;
+import javax.validation.ConstraintViolationException;
 
 import org.junit.Rule;
 import org.junit.Test;
@@ -10,6 +11,7 @@ import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
+import org.springframework.boot.test.autoconfigure.orm.jpa.AutoConfigureTestEntityManager;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -19,10 +21,12 @@ import org.springframework.test.context.junit4.SpringRunner;
 import br.com.rest.models.Student;
 import br.com.rest.repositories.StudentRepository;
 import br.com.rest.services.StudentService;
+import org.springframework.transaction.annotation.Transactional;
 
 @RunWith(SpringRunner.class)
-@SpringBootTest
 @DataJpaTest
+@AutoConfigureTestEntityManager
+@Transactional
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 public class StudentRepositoryTests {
     
@@ -37,11 +41,12 @@ public class StudentRepositoryTests {
            
     @Test
     public void saveShouldPersistData() {
+//        thrown.expect(ConstraintViolationException.class);
         Student student = new Student("nigas", "123456");
-        studentRepository.save(student);
-        assertThat(student.getId()).isNotNull();
-        assertThat(student.getName()).isEqualTo("nigas");
-        assertThat(student.getRegistration()).isEqualTo("123456");
+        studentRepository.save(new Student());
+//        assertThat(student.getId()).isNotNull();
+//        assertThat(student.getName()).isEqualTo("nigas");
+//        assertThat(student.getRegistration()).isEqualTo("123456");
     }
     
     @Test
